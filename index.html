@@ -139,32 +139,4 @@
 
     const addToLog = (roll, prev, next) => {
       const log = document.getElementById('log');
-      const entry = document.createElement('li');
-      entry.textContent = `${stations[prev]} ➡️ (${roll}) ➡️ ${stations[next]}`;
-      log.prepend(entry);
-    };
-
-    document.getElementById('rollButton').addEventListener('click', () => {
-      const roll = Math.floor(Math.random() * 6) + 1;
-      const previous = current;
-      current = (current + roll) % stations.length;
-      updateDisplay();
-      addToLog(roll, previous, current);
-    });
-
-    document.getElementById('resetButton').addEventListener('click', () => {
-      current = 0;
-      updateDisplay();
-      document.getElementById('log').innerHTML = '';
-      document.getElementById('cardDisplay').textContent = '';
-    });
-
-    document.getElementById('cardButton').addEventListener('click', () => {
-      const card = cards[Math.floor(Math.random() * cards.length)];
-      document.getElementById('cardDisplay').textContent = card;
-    });
-
-    updateDisplay();
-  </script>
-</body>
-</html>
+      const en
