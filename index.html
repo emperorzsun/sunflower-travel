@@ -31,14 +31,6 @@
       background-color: #facc15;
       font-weight: bold;
     }
-    .sun-tile {
-      background-color: #fcd34d;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      border-radius: 10px;
-      font-size: 24px;
-    }
     .sunflower {
       position: absolute;
       top: -10px;
@@ -81,20 +73,14 @@
       "안국", "종각", "🌻", "잠실", "건대입구"
     ];
 
-    // 시계방향 칸 순서에 해당하는 인덱스 매핑 배열
-    const clockwiseOrder = [
-      0, 1, 2, 3, 4, 5, 6, 7, 8, 13, 14, 15, 16, 17, 18, 19, 10, 9, 12, 11
+    const clockwiseIndexes = [
+      0, 1, 2, 3, 4,
+      5, 6, 7, 8, 13,
+      14, 15, 16, 17, 18,
+      19, 10, 9, 12, 11
     ];
 
-    const cards = [
-      "3칸 앞으로 이동!",
-      "뒤로 2칸!",
-      "다음 역에서 셀카 찍기 📸",
-      "쉬는 타임! 한 턴 쉽니다.",
-      "오늘의 운세는? 하늘 한번 보기 ☁️",
-    ];
-
-    const stations = clockwiseOrder.map(i => realStations[i]);
+    const stations = clockwiseIndexes.map(i => realStations[i]);
 
     const board = document.getElementById("board");
     const diceDisplay = document.createElement("div");
@@ -102,18 +88,17 @@
     diceDisplay.className = "text-2xl font-bold text-red-500 bg-white rounded shadow flex items-center justify-center";
     diceDisplay.textContent = "🎲";
 
-    const positions = [
-      0, 1, 2, 3, 4,
-      19, null, null, null, 5,
-      18, null, "dice", null, 6,
-      17, null, null, null, 7,
-      16, 15, 14, 13, 8,
-      11, 10, 9, 12
-    ];
+    const boardIndexes = [
+  0, 1, 2, 3, 4,
+  19, null, null, null, 5,
+  18, null, "dice", null, 6,
+  17, null, null, null, 7,
+  16, 15, 14, 13, 8
+];
 
     for (let i = 0; i < 25; i++) {
       const container = document.createElement("div");
-      const pos = positions[i];
+      const pos = boardIndexes[i];
       if (pos === null) {
         container.className = "empty";
       } else if (pos === "dice") {
