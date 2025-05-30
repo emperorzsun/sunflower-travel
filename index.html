@@ -67,11 +67,11 @@
 
   <script>
     const realStations = [
-      "신촌", "홍대입구", "서울숲", "압구정로데오", "강남",
-      "선유도", "여의도", "이촌", "마곡나루", "이수",
-      "삼각지", "시청", "명동", "🌻", "경복궁",
-      "안국", "종각", "🌻", "잠실", "건대입구"
-    ];
+  "신촌", "홍대입구", "서울숲", "압구정로데오", "강남",
+  "선유도", "여의도", "이촌", "마곡나루", "이수",
+  "삼각지", "시청", "명동", "경복궁",
+  "안국", "종각", "잠실", "건대입구"
+];
 
     const board = document.getElementById("board");
     const diceDisplay = document.createElement("div");
@@ -81,10 +81,10 @@
 
     const layoutMap = [
   0, 1, 2, 3, 4, 5,
-  19, null, null, null, null, 6,
-  18, null, "dice", null, null, 7,
-  17, null, null, null, null, 8,
-  16, 15, 14, 13, 12, 9
+  17, null, null, null, null, 6,
+  16, null, "dice", null, null, 7,
+  15, null, null, null, null, 8,
+  14, 13, 12, 11, 10, 9
 ];
 
     const stations = [...realStations]; // 그대로 시계방향 순서
