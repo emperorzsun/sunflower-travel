@@ -78,6 +78,10 @@
     diceDisplay.id = "diceDisplay";
     diceDisplay.className = "text-2xl font-bold text-red-500 bg-white rounded shadow flex items-center justify-center w-full h-full";
     diceDisplay.textContent = "🎲";
+const logo = document.createElement("div");
+logo.textContent = "해바라기 8주년♥";
+logo.className = "text-sm text-yellow-600 font-bold ml-2";
+diceDisplay.appendChild(logo);
 
     const layoutMap = [
   0, 1, 2, 3, 4, 5,
@@ -107,29 +111,33 @@
     let isMoving = false;
 
     const updateDisplay = () => {
-      for (let i = 0; i < stations.length; i++) {
-        const el = document.getElementById(`station-${i}`);
-        if (!el) continue;
-        el.classList.remove("current");
-        const icon = el.querySelector(".sunflower");
-        if (icon) icon.remove();
-        if (i === current) {
-          el.classList.add("current");
-          const flower = document.createElement("span");
-          flower.textContent = "🌻";
-          flower.classList.add("sunflower");
-          el.appendChild(flower);
-        }
-      }
-      document.getElementById("status").textContent = `현재 위치: ${stations[current]}`;
-    };
+  for (let i = 0; i < stations.length; i++) {
+    const el = document.getElementById(`station-${i}`);
+    if (!el) continue;
+    el.classList.remove("current");
+    const icon = el.querySelector(".sunflower");
+    if (icon) icon.remove();
+    if (i === current) {
+      el.classList.add("current");
+      const flower = document.createElement("span");
+      flower.textContent = "🌻";
+      flower.classList.add("sunflower");
+      el.appendChild(flower);
+    }
+  }
+  document.getElementById("status").textContent = `현재 위치: ${stations[current]}`;
+  localStorage.setItem("current", current);
+}
 
     const addToLog = (roll, prev, next) => {
-      const log = document.getElementById("log");
-      const entry = document.createElement("li");
-      entry.textContent = `${stations[prev]} ➡️ (${roll}) ➡️ ${stations[next]}`;
-      log.prepend(entry);
-    };
+  const log = document.getElementById("log");
+  const entry = document.createElement("li");
+  entry.textContent = `${stations[prev]} ➡️ (${roll}) ➡️ ${stations[next]}`;
+  log.prepend(entry);
+
+  const logItems = Array.from(log.children).map(li => li.textContent);
+  localStorage.setItem("log", JSON.stringify(logItems));
+};
 
     const moveStepByStep = (from, to, roll) => {
       isMoving = true;
@@ -137,7 +145,27 @@
       let i = 0;
       const interval = setInterval(() => {
         current = (from + i + 1) % stations.length;
-        updateDisplay();
+        const savedCurrent = localStorage.getItem("current");
+if (savedCurrent !== null) {
+  current = parseInt(savedCurrent);
+}
+
+const savedLog = localStorage.getItem("log");
+if (savedLog) {
+  const logList = document.getElementById("log");
+  JSON.parse(savedLog).forEach(item => {
+    const li = document.createElement("li");
+    li.textContent = item;
+    logList.appendChild(li);
+  });
+}
+
+const savedCard = localStorage.getItem("card");
+if (savedCard) {
+  document.getElementById("cardDisplay").textContent = savedCard;
+}
+
+updateDisplay();
         i++;
         if (i >= steps) {
           clearInterval(interval);
@@ -152,23 +180,29 @@
       const roll = Math.floor(Math.random() * 6) + 1;
       const previous = current;
       const next = (current + roll) % stations.length;
-      diceDisplay.textContent = `🎲 ${roll}`;
+      diceDisplay.innerHTML = `🎲 <span class='ml-2 text-sm text-yellow-600 font-bold'>해바라기 8주년♥</span> ${roll}`;
+localStorage.setItem("dice", roll);
       moveStepByStep(previous, next, roll);
     });
 
     document.getElementById("resetButton").addEventListener("click", () => {
-      if (isMoving) return;
-      current = 0;
-      updateDisplay();
-      document.getElementById("log").innerHTML = "";
-      document.getElementById("cardDisplay").textContent = "";
-      diceDisplay.textContent = "🎲";
-    });
+  if (isMoving) return;
+  current = 0;
+  updateDisplay();
+  document.getElementById("log").innerHTML = "";
+  document.getElementById("cardDisplay").textContent = "";
+  diceDisplay.textContent = "🎲";
+  localStorage.removeItem("current");
+  localStorage.removeItem("log");
+  localStorage.removeItem("dice");
+});
 
     document.getElementById("cardButton").addEventListener("click", () => {
-      if (isMoving) return;
-      document.getElementById("cardDisplay").textContent = "카드 내용 예시 (추후 입력 가능)";
-    });
+  if (isMoving) return;
+  const cardText = "카드 내용 예시 (추후 입력 가능)";
+  document.getElementById("cardDisplay").textContent = cardText;
+  localStorage.setItem("card", cardText);
+});
 
     updateDisplay();
   </script>
