@@ -86,7 +86,7 @@ diceDisplay.appendChild(logo);
     const layoutMap = [
   0, 1, 2, 3, 4, 5,
   17, null, null, null, null, 6,
-  16, null, "dice", null, null, 7,
+  16, null, "logo", null, null, 7,
   15, null, null, null, null, 8,
   14, 13, 12, 11, 10, 9
 ];
@@ -94,18 +94,21 @@ diceDisplay.appendChild(logo);
     const stations = [...realStations]; // 그대로 시계방향 순서
 
     layoutMap.forEach((pos, i) => {
-      const cell = document.createElement("div");
-      if (pos === null) {
-        cell.className = "empty";
-      } else if (pos === "dice") {
-        cell.appendChild(diceDisplay);
-      } else {
-        cell.id = `station-${pos}`;
-        cell.className = "station";
-        cell.textContent = stations[pos];
-      }
-      board.appendChild(cell);
-    });
+  const cell = document.createElement("div");
+  if (pos === null) {
+    cell.className = "empty";
+  } else if (pos === "dice") {
+    cell.appendChild(diceDisplay);
+  } else if (pos === "logo") {
+    cell.className = "station flex flex-col items-center justify-center text-yellow-700 font-bold";
+    cell.innerHTML = "<div class='text-2xl'>🌻</div><div>해바라기 8주년♥</div>";
+  } else {
+    cell.id = `station-${pos}`;
+    cell.className = "station";
+    cell.textContent = stations[pos];
+  }
+  board.appendChild(cell);
+});
 
     let current = 0;
     let isMoving = false;
