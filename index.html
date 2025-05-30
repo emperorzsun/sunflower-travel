@@ -81,6 +81,11 @@
       "안국", "종각", "🌻", "잠실", "건대입구"
     ];
 
+    // 시계방향 칸 순서에 해당하는 인덱스 매핑 배열
+    const clockwiseOrder = [
+      0, 1, 2, 3, 4, 5, 6, 7, 8, 13, 14, 15, 16, 17, 18, 19, 10, 9, 12, 11
+    ];
+
     const cards = [
       "3칸 앞으로 이동!",
       "뒤로 2칸!",
@@ -89,7 +94,7 @@
       "오늘의 운세는? 하늘 한번 보기 ☁️",
     ];
 
-    let stations = [...realStations];
+    const stations = clockwiseOrder.map(i => realStations[i]);
 
     const board = document.getElementById("board");
     const diceDisplay = document.createElement("div");
