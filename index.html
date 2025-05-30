@@ -12,16 +12,8 @@
     }
     .board {
       display: grid;
-      grid-template-areas:
-        "s0 s1 s2 s3 s4"
-        "s19 .  .  . s5"
-        "s18 .  .  . s6"
-        "s17 .  .  . s7"
-        "s16 s15 s14 s13 s8"
-        "sun1 .  .  . s9"
-        "sun0 s11 s10 s12 s9";
       grid-template-columns: repeat(5, 80px);
-      grid-template-rows: repeat(7, 80px);
+      grid-template-rows: repeat(5, 80px);
       gap: 4px;
     }
     .station {
@@ -39,12 +31,6 @@
       background-color: #facc15;
       font-weight: bold;
     }
-    .sunflower {
-      position: absolute;
-      top: -10px;
-      right: -10px;
-      font-size: 20px;
-    }
     .sun-tile {
       background-color: #fcd34d;
       display: flex;
@@ -53,34 +39,50 @@
       border-radius: 10px;
       font-size: 24px;
     }
+    .sunflower {
+      position: absolute;
+      top: -10px;
+      right: -10px;
+      font-size: 20px;
+    }
+    .empty {
+      background-color: transparent;
+    }
   </style>
 </head>
 <body class="flex flex-col items-center justify-center min-h-screen p-4">
   <h1 class="text-3xl font-bold text-yellow-600 mb-4">🌻 해바라기 - 서울 랜덤 여행 🌻</h1>
 
   <div class="board mb-6">
-    <div id="station-0" class="station" style="grid-area: s0;">신촌</div>
-    <div id="station-1" class="station" style="grid-area: s1;">홍대입구</div>
-    <div id="station-2" class="station" style="grid-area: s2;">서울숲</div>
-    <div id="station-3" class="station" style="grid-area: s3;">압구정로데오</div>
-    <div id="station-4" class="station" style="grid-area: s4;">강남</div>
-    <div id="station-5" class="station" style="grid-area: s5;">선유도</div>
-    <div id="station-6" class="station" style="grid-area: s6;">여의도</div>
-    <div id="station-7" class="station" style="grid-area: s7;">마곡나루</div>
-    <div id="station-8" class="station" style="grid-area: s8;">이촌</div>
-    <div id="station-9" class="station" style="grid-area: s9;">이수</div>
-    <div id="station-10" class="station" style="grid-area: s10;">삼각지</div>
-    <div id="station-11" class="station" style="grid-area: s11;">시청</div>
-    <div id="station-12" class="station" style="grid-area: s12;">명동</div>
-    <div id="station-13" class="station" style="grid-area: s13;">경복궁</div>
-    <div id="station-14" class="station" style="grid-area: s14;">안국</div>
-    <div id="station-15" class="station" style="grid-area: s15;">종각</div>
-    <div id="station-16" class="station" style="grid-area: s16;">잠실</div>
-    <div id="station-17" class="station" style="grid-area: s17;">건대입구</div>
-    <div id="station-18" class="station" style="grid-area: s18;">카드칸1</div>
-    <div id="station-19" class="station" style="grid-area: s19;">카드칸2</div>
-    <div class="sun-tile" style="grid-area: sun0;">🌻</div>
-    <div class="sun-tile" style="grid-area: sun1;">🌻</div>
+    <div id="station-0" class="station">신촌</div>
+    <div id="station-1" class="station">홍대입구</div>
+    <div id="station-2" class="station">🌻</div>
+    <div id="station-3" class="station">서울숲</div>
+    <div id="station-4" class="station">압구정로데오</div>
+
+    <div id="station-15" class="station">건대입구</div>
+    <div class="empty"></div>
+    <div class="empty"></div>
+    <div class="empty"></div>
+    <div id="station-5" class="station">강남</div>
+
+    <div id="station-14" class="station">잠실</div>
+    <div class="empty"></div>
+    <div class="empty"></div>
+    <div class="empty"></div>
+    <div id="station-6" class="station">선유도</div>
+
+    <div id="station-13" class="station">종각</div>
+    <div class="empty"></div>
+    <div class="empty"></div>
+    <div class="empty"></div>
+    <div id="station-7" class="station">여의도</div>
+
+    <div id="station-12" class="station">안국</div>
+    <div id="station-11" class="station">경복궁</div>
+    <div id="station-10" class="station">명동</div>
+    <div id="station-9" class="station">시청</div>
+    <div id="station-8" class="station">🌻</div>
   </div>
 
   <div class="flex gap-4 mb-4 flex-wrap justify-center">
@@ -103,10 +105,10 @@
 
   <script>
     const stations = [
-      "신촌", "홍대입구", "서울숲", "압구정로데오", "강남",
-      "선유도", "여의도", "마곡나루", "이촌", "이수",
-      "삼각지", "시청", "명동", "경복궁", "안국",
-      "종각", "잠실", "건대입구", "카드칸1", "카드칸2"
+      "신촌", "홍대입구", "🌻", "서울숲", "압구정로데오",
+      "강남", "선유도", "여의도", "🌻", "시청",
+      "명동", "경복궁", "안국", "종각", "잠실",
+      "건대입구"
     ];
 
     const cards = [
