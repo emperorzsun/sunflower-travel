@@ -10,44 +10,64 @@
       background: #fffbe6;
       font-family: 'Arial', sans-serif;
     }
+    .board {
+      display: grid;
+      grid-template-areas:
+        "s0 s1 s2 s3 s4"
+        "s17 .  .  . s5"
+        "s16 .  .  . s6"
+        "s15 .  .  . s7"
+        "s14 s13 s12 s11 s8"
+        "s10 .  .  . s9";
+      grid-template-columns: repeat(5, 80px);
+      grid-template-rows: repeat(6, 80px);
+      gap: 4px;
+    }
     .station {
-      transition: transform 0.3s;
+      background-color: #fef3c7;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 10px;
       position: relative;
+      font-size: 14px;
+      padding: 4px;
+      text-align: center;
     }
     .station.current {
-      transform: scale(1.1);
-      background-color: #fcd34d !important;
+      background-color: #facc15;
       font-weight: bold;
     }
     .sunflower {
       position: absolute;
-      top: -20px;
+      top: -10px;
       right: -10px;
-      font-size: 24px;
+      font-size: 20px;
     }
   </style>
 </head>
-<body class="flex flex-col items-center justify-center min-h-screen p-6">
-  <h1 class="text-3xl font-bold text-yellow-600 mb-6">🌻 해바라기 - 서울 랜덤 여행 🌻</h1>
-  <div class="grid grid-cols-3 gap-4 mb-6" id="stationBoard">
-    <div class="station px-4 py-2 bg-yellow-100 rounded" id="station-0">신촌</div>
-    <div class="station px-4 py-2 bg-yellow-100 rounded" id="station-1">홍대입구</div>
-    <div class="station px-4 py-2 bg-yellow-100 rounded" id="station-2">서울숲</div>
-    <div class="station px-4 py-2 bg-yellow-100 rounded" id="station-3">압구정로데오</div>
-    <div class="station px-4 py-2 bg-yellow-100 rounded" id="station-4">강남</div>
-    <div class="station px-4 py-2 bg-yellow-100 rounded" id="station-5">선유도</div>
-    <div class="station px-4 py-2 bg-yellow-100 rounded" id="station-6">여의도</div>
-    <div class="station px-4 py-2 bg-yellow-100 rounded" id="station-7">마곡나루</div>
-    <div class="station px-4 py-2 bg-yellow-100 rounded" id="station-8">이촌</div>
-    <div class="station px-4 py-2 bg-yellow-100 rounded" id="station-9">이수</div>
-    <div class="station px-4 py-2 bg-yellow-100 rounded" id="station-10">삼각지</div>
-    <div class="station px-4 py-2 bg-yellow-100 rounded" id="station-11">시청</div>
-    <div class="station px-4 py-2 bg-yellow-100 rounded" id="station-12">명동</div>
-    <div class="station px-4 py-2 bg-yellow-100 rounded" id="station-13">경복궁</div>
-    <div class="station px-4 py-2 bg-yellow-100 rounded" id="station-14">안국</div>
-    <div class="station px-4 py-2 bg-yellow-100 rounded" id="station-15">종각</div>
-    <div class="station px-4 py-2 bg-yellow-100 rounded" id="station-16">잠실</div>
-    <div class="station px-4 py-2 bg-yellow-100 rounded" id="station-17">건대입구</div>
+<body class="flex flex-col items-center justify-center min-h-screen p-4">
+  <h1 class="text-3xl font-bold text-yellow-600 mb-4">🌻 해바라기 - 서울 랜덤 여행 🌻</h1>
+
+  <div class="board mb-6">
+    <div id="station-0" class="station" style="grid-area: s0;">신촌</div>
+    <div id="station-1" class="station" style="grid-area: s1;">홍대입구</div>
+    <div id="station-2" class="station" style="grid-area: s2;">서울숲</div>
+    <div id="station-3" class="station" style="grid-area: s3;">압구정로데오</div>
+    <div id="station-4" class="station" style="grid-area: s4;">강남</div>
+    <div id="station-5" class="station" style="grid-area: s5;">선유도</div>
+    <div id="station-6" class="station" style="grid-area: s6;">여의도</div>
+    <div id="station-7" class="station" style="grid-area: s7;">마곡나루</div>
+    <div id="station-8" class="station" style="grid-area: s8;">이촌</div>
+    <div id="station-9" class="station" style="grid-area: s9;">이수</div>
+    <div id="station-10" class="station" style="grid-area: s10;">삼각지</div>
+    <div id="station-11" class="station" style="grid-area: s11;">시청</div>
+    <div id="station-12" class="station" style="grid-area: s12;">명동</div>
+    <div id="station-13" class="station" style="grid-area: s13;">경복궁</div>
+    <div id="station-14" class="station" style="grid-area: s14;">안국</div>
+    <div id="station-15" class="station" style="grid-area: s15;">종각</div>
+    <div id="station-16" class="station" style="grid-area: s16;">잠실</div>
+    <div id="station-17" class="station" style="grid-area: s17;">건대입구</div>
   </div>
 
   <div class="flex gap-4 mb-4">
@@ -85,14 +105,14 @@
         }
       });
       document.getElementById('status').textContent = `현재 위치: ${stations[current]}`;
-    }
+    };
 
     const addToLog = (roll, prev, next) => {
       const log = document.getElementById('log');
       const entry = document.createElement('li');
       entry.textContent = `${stations[prev]} ➡️ (${roll}) ➡️ ${stations[next]}`;
       log.prepend(entry);
-    }
+    };
 
     document.getElementById('rollButton').addEventListener('click', () => {
       const roll = Math.floor(Math.random() * 6) + 1;
