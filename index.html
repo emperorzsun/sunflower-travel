@@ -67,20 +67,11 @@
 
   <script>
     const realStations = [
-  "신촌", "홍대입구", "서울숲", "압구정로데오", "강남",
-  "선유도", "여의도", "이촌", "마곡나루", "이수",
-  "삼각지", "시청", "명동", "🌻", "경복궁",
-  "안국", "종각", "🌻", "잠실", "건대입구"
-];
-
-    const clockwiseIndexes = [
-  0, 1, 2, 3, 4,     // 위쪽 줄 왼→오
-  5, 6, 7, 8, 9,     // 오른쪽 위→아래
-  10, 11, 12, 13, 14,// 아래쪽 오→왼
-  15, 16, 17, 18, 19 // 왼쪽 아래→위
-];
-
-    const stations = clockwiseIndexes.map(i => realStations[i]);
+      "신촌", "홍대입구", "서울숲", "압구정로데오", "강남",
+      "선유도", "여의도", "이촌", "마곡나루", "이수",
+      "삼각지", "시청", "명동", "🌻", "경복궁",
+      "안국", "종각", "🌻", "잠실", "건대입구"
+    ];
 
     const board = document.getElementById("board");
     const diceDisplay = document.createElement("div");
@@ -88,36 +79,31 @@
     diceDisplay.className = "text-2xl font-bold text-red-500 bg-white rounded shadow flex items-center justify-center";
     diceDisplay.textContent = "🎲";
 
-    const boardIndexes = [
-  0, 1, 2, 3, 4,
-  5, null, null, null, 6,
-  7, null, "dice", null, 8,
-  9, null, null, null, 10,
-  11, 12, 13, 14, 15
-]; // 역을 시계방향으로 배치한 인덱스
+    // 시계방향으로 위치에 해당하는 인덱스
+    const boardLayout = [
+      0, 1, 2, 3, 4,
+      19, null, null, null, 5,
+      18, null, "dice", null, 6,
+      17, null, null, null, 7,
+      16, 15, 14, 13, 8
+    ];
 
-    const layoutOrder = [
-  0, 1, 2, 3, 4,
-  5, null, null, null, 6,
-  7, null, "dice", null, 8,
-  9, null, null, null, 10,
-  11, 12, 13, 14, 15
-];
+    // 보드에 표시할 실제 정렬된 역 (시계방향 순서)
+    const clockwiseOrder = [
+      0, 1, 2, 3, 4,
+      5, 6, 7, 8, 9,
+      10, 11, 12, 13, 14,
+      15, 16, 17, 18, 19
+    ];
 
-for (let i = 0; i < layoutOrder.length; i++) {
-  const container = document.createElement("div");
-  const pos = layoutOrder[i];
-  if (pos === null) {
-    container.className = "empty";
-  } else if (pos === "dice") {
-    container.appendChild(diceDisplay);
-  } else {
-    container.id = `station-${pos}`;
-    container.className = "station";
-    container.textContent = stations[pos];
-  }
-  board.appendChild(container);
-} else if (pos === "dice") {
+    const stations = clockwiseOrder.map(i => realStations[i]);
+
+    for (let i = 0; i < boardLayout.length; i++) {
+      const container = document.createElement("div");
+      const pos = boardLayout[i];
+      if (pos === null) {
+        container.className = "empty";
+      } else if (pos === "dice") {
         container.appendChild(diceDisplay);
       } else {
         container.id = `station-${pos}`;
@@ -189,7 +175,7 @@ for (let i = 0; i < layoutOrder.length; i++) {
 
     document.getElementById('cardButton').addEventListener('click', () => {
       if (isMoving) return;
-      const card = cards[Math.floor(Math.random() * cards.length)];
+      const card = "카드 내용 예시 (추후 입력 가능)";
       document.getElementById('cardDisplay').textContent = card;
     });
 
