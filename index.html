@@ -12,7 +12,7 @@
     }
     .board {
       display: grid;
-      grid-template-columns: repeat(5, 80px);
+      grid-template-columns: repeat(6, 80px);
       grid-template-rows: repeat(5, 80px);
       gap: 4px;
     }
@@ -80,11 +80,11 @@
     diceDisplay.textContent = "🎲";
 
     const layoutMap = [
-  0, 1, 2, 3, 4,
-  19, null, 8, null, 5,
-  18, null, "dice", null, 6,
-  17, null, null, null, 7,
-  16, 15, 14, 13, null
+  0, 1, 2, 3, 4, 5,
+  19, null, null, null, null, 6,
+  18, null, "dice", null, null, 7,
+  17, null, null, null, null, 8,
+  16, 15, 14, 13, 12, 9
 ];
 
     const stations = [...realStations]; // 그대로 시계방향 순서
