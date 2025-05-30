@@ -14,13 +14,14 @@
       display: grid;
       grid-template-areas:
         "s0 s1 s2 s3 s4"
-        "s17 .  .  . s5"
-        "s16 .  .  . s6"
-        "s15 .  .  . s7"
-        "s14 s13 s12 s11 s8"
-        "s10 .  .  . s9";
+        "s19 .  .  . s5"
+        "s18 .  .  . s6"
+        "s17 .  .  . s7"
+        "s16 s15 s14 s13 s8"
+        "sun1 .  .  . s9"
+        "sun0 s11 s10 s12 s9";
       grid-template-columns: repeat(5, 80px);
-      grid-template-rows: repeat(6, 80px);
+      grid-template-rows: repeat(7, 80px);
       gap: 4px;
     }
     .station {
@@ -43,6 +44,14 @@
       top: -10px;
       right: -10px;
       font-size: 20px;
+    }
+    .sun-tile {
+      background-color: #fcd34d;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 10px;
+      font-size: 24px;
     }
   </style>
 </head>
@@ -68,15 +77,26 @@
     <div id="station-15" class="station" style="grid-area: s15;">종각</div>
     <div id="station-16" class="station" style="grid-area: s16;">잠실</div>
     <div id="station-17" class="station" style="grid-area: s17;">건대입구</div>
+    <div id="station-18" class="station" style="grid-area: s18;">카드칸1</div>
+    <div id="station-19" class="station" style="grid-area: s19;">카드칸2</div>
+    <div class="sun-tile" style="grid-area: sun0;">🌻</div>
+    <div class="sun-tile" style="grid-area: sun1;">🌻</div>
   </div>
 
-  <div class="flex gap-4 mb-4">
+  <div class="flex gap-4 mb-4 flex-wrap justify-center">
     <button id="rollButton" class="px-6 py-3 bg-yellow-400 text-white font-semibold rounded shadow">🎲 주사위 굴리기</button>
     <button id="resetButton" class="px-6 py-3 bg-red-400 text-white font-semibold rounded shadow">🔄 리셋</button>
+    <button id="cardButton" class="px-6 py-3 bg-green-400 text-white font-semibold rounded shadow">🎴 카드 뽑기</button>
   </div>
 
-  <p class="text-lg" id="status">현재 위치: 신촌</p>
-  <div class="mt-4 w-full max-w-md">
+  <p class="text-lg mb-2" id="status">현재 위치: 신촌</p>
+
+  <div class="mb-6 text-center">
+    <h2 class="text-xl font-bold mb-2">🎴 이번 카드</h2>
+    <div id="cardDisplay" class="bg-white text-yellow-700 border border-yellow-300 rounded p-4 min-h-[60px] max-w-md mx-auto shadow"></div>
+  </div>
+
+  <div class="w-full max-w-md">
     <h2 class="text-xl font-bold mb-2">📜 이동 로그</h2>
     <ul id="log" class="list-disc list-inside bg-white p-4 rounded shadow max-h-48 overflow-y-auto"></ul>
   </div>
@@ -86,7 +106,15 @@
       "신촌", "홍대입구", "서울숲", "압구정로데오", "강남",
       "선유도", "여의도", "마곡나루", "이촌", "이수",
       "삼각지", "시청", "명동", "경복궁", "안국",
-      "종각", "잠실", "건대입구"
+      "종각", "잠실", "건대입구", "카드칸1", "카드칸2"
+    ];
+
+    const cards = [
+      "3칸 앞으로 이동!",
+      "뒤로 2칸!",
+      "다음 역에서 셀카 찍기 📸",
+      "쉬는 타임! 한 턴 쉽니다.",
+      "오늘의 운세는? 하늘 한번 보기 ☁️",
     ];
 
     let current = 0;
@@ -126,6 +154,12 @@
       current = 0;
       updateDisplay();
       document.getElementById('log').innerHTML = '';
+      document.getElementById('cardDisplay').textContent = '';
+    });
+
+    document.getElementById('cardButton').addEventListener('click', () => {
+      const card = cards[Math.floor(Math.random() * cards.length)];
+      document.getElementById('cardDisplay').textContent = card;
     });
 
     updateDisplay();
