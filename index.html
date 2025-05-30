@@ -60,29 +60,29 @@
     <div id="station-3" class="station">서울숲</div>
     <div id="station-4" class="station">압구정로데오</div>
 
-    <div id="station-15" class="station">건대입구</div>
+    <div id="station-19" class="station">삼각지</div>
     <div class="empty"></div>
-    <div class="empty"></div>
+    <div id="diceDisplay" class="station text-2xl font-bold text-red-500">🎲</div>
     <div class="empty"></div>
     <div id="station-5" class="station">강남</div>
 
-    <div id="station-14" class="station">잠실</div>
+    <div id="station-18" class="station">이수</div>
     <div class="empty"></div>
     <div class="empty"></div>
     <div class="empty"></div>
     <div id="station-6" class="station">선유도</div>
 
-    <div id="station-13" class="station">종각</div>
+    <div id="station-17" class="station">카드칸2</div>
     <div class="empty"></div>
     <div class="empty"></div>
     <div class="empty"></div>
     <div id="station-7" class="station">여의도</div>
 
+    <div id="station-16" class="station">카드칸1</div>
+    <div id="station-15" class="station">건대입구</div>
+    <div id="station-14" class="station">잠실</div>
+    <div id="station-13" class="station">종각</div>
     <div id="station-12" class="station">안국</div>
-    <div id="station-11" class="station">경복궁</div>
-    <div id="station-10" class="station">명동</div>
-    <div id="station-9" class="station">시청</div>
-    <div id="station-8" class="station">🌻</div>
   </div>
 
   <div class="flex gap-4 mb-4 flex-wrap justify-center">
@@ -108,7 +108,7 @@
       "신촌", "홍대입구", "🌻", "서울숲", "압구정로데오",
       "강남", "선유도", "여의도", "🌻", "시청",
       "명동", "경복궁", "안국", "종각", "잠실",
-      "건대입구"
+      "건대입구", "카드칸1", "카드칸2", "이수", "삼각지"
     ];
 
     const cards = [
@@ -120,6 +120,7 @@
     ];
 
     let current = 0;
+    let isMoving = false;
 
     const updateDisplay = () => {
       document.querySelectorAll('.station').forEach((el, index) => {
@@ -145,6 +146,7 @@
     };
 
     const moveStepByStep = (from, to, roll) => {
+      isMoving = true;
       let steps = (to + stations.length - from) % stations.length;
       let i = 0;
       const interval = setInterval(() => {
@@ -154,25 +156,31 @@
         if (i >= steps) {
           clearInterval(interval);
           addToLog(roll, from, to);
+          isMoving = false;
         }
-      }, 400); // 0.4초 간격으로 이동
+      }, 400);
     };
 
     document.getElementById('rollButton').addEventListener('click', () => {
+      if (isMoving) return;
       const roll = Math.floor(Math.random() * 6) + 1;
       const previous = current;
       const next = (current + roll) % stations.length;
+      document.getElementById('diceDisplay').textContent = `🎲 ${roll}`;
       moveStepByStep(previous, next, roll);
     });
 
     document.getElementById('resetButton').addEventListener('click', () => {
+      if (isMoving) return;
       current = 0;
       updateDisplay();
       document.getElementById('log').innerHTML = '';
       document.getElementById('cardDisplay').textContent = '';
+      document.getElementById('diceDisplay').textContent = '🎲';
     });
 
     document.getElementById('cardButton').addEventListener('click', () => {
+      if (isMoving) return;
       const card = cards[Math.floor(Math.random() * cards.length)];
       document.getElementById('cardDisplay').textContent = card;
     });
