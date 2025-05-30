@@ -90,18 +90,34 @@
 
     const boardIndexes = [
   0, 1, 2, 3, 4,
-  19, null, null, null, 5,
-  18, null, "dice", null, 6,
-  17, null, null, null, 7,
-  16, 15, 14, 13, 8
+  5, null, null, null, 6,
+  7, null, "dice", null, 8,
+  9, null, null, null, 10,
+  11, 12, 13, 14, 15
 ]; // 역을 시계방향으로 배치한 인덱스
 
-    for (let i = 0; i < 25; i++) {
-      const container = document.createElement("div");
-      const pos = boardIndexes[i];
-      if (pos === null) {
-        container.className = "empty";
-      } else if (pos === "dice") {
+    const layoutOrder = [
+  0, 1, 2, 3, 4,
+  5, null, null, null, 6,
+  7, null, "dice", null, 8,
+  9, null, null, null, 10,
+  11, 12, 13, 14, 15
+];
+
+for (let i = 0; i < layoutOrder.length; i++) {
+  const container = document.createElement("div");
+  const pos = layoutOrder[i];
+  if (pos === null) {
+    container.className = "empty";
+  } else if (pos === "dice") {
+    container.appendChild(diceDisplay);
+  } else {
+    container.id = `station-${pos}`;
+    container.className = "station";
+    container.textContent = stations[pos];
+  }
+  board.appendChild(container);
+} else if (pos === "dice") {
         container.appendChild(diceDisplay);
       } else {
         container.id = `station-${pos}`;
