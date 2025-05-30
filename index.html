@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>해바라기 - 서울 랜덤 여행</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body {
+      background: #fffbe6;
+      font-family: 'Arial', sans-serif;
+    }
+    .station {
+      transition: transform 0.3s;
+      position: relative;
+    }
+    .station.current {
+      transform: scale(1.1);
+      background-color: #fcd34d !important;
+      font-weight: bold;
+    }
+    .sunflower {
+      position: absolute;
+      top: -20px;
+      right: -10px;
+      font-size: 24px;
+    }
+  </style>
+</head>
+<body class="flex flex-col items-center justify-center min-h-screen p-6">
+  <h1 class="text-3xl font-bold text-yellow-600 mb-6">🌻 해바라기 - 서울 랜덤 여행 🌻</h1>
+  <div class="grid grid-cols-3 gap-4 mb-6" id="stationBoard">
+    <div class="station px-4 py-2 bg-yellow-100 rounded" id="station-0">신촌</div>
+    <div class="station px-4 py-2 bg-yellow-100 rounded" id="station-1">홍대입구</div>
+    <div class="station px-4 py-2 bg-yellow-100 rounded" id="station-2">서울숲</div>
+    <div class="station px-4 py-2 bg-yellow-100 rounded" id="station-3">압구정로데오</div>
+    <div class="station px-4 py-2 bg-yellow-100 rounded" id="station-4">강남</div>
+    <div class="station px-4 py-2 bg-yellow-100 rounded" id="station-5">선유도</div>
+    <div class="station px-4 py-2 bg-yellow-100 rounded" id="station-6">여의도</div>
+    <div class="station px-4 py-2 bg-yellow-100 rounded" id="station-7">마곡나루</div>
+    <div class="station px-4 py-2 bg-yellow-100 rounded" id="station-8">이촌</div>
+    <div class="station px-4 py-2 bg-yellow-100 rounded" id="station-9">이수</div>
+    <div class="station px-4 py-2 bg-yellow-100 rounded" id="station-10">삼각지</div>
+    <div class="station px-4 py-2 bg-yellow-100 rounded" id="station-11">시청</div>
+    <div class="station px-4 py-2 bg-yellow-100 rounded" id="station-12">명동</div>
+    <div class="station px-4 py-2 bg-yellow-100 rounded" id="station-13">경복궁</div>
+    <div class="station px-4 py-2 bg-yellow-100 rounded" id="station-14">안국</div>
+    <div class="station px-4 py-2 bg-yellow-100 rounded" id="station-15">종각</div>
+    <div class="station px-4 py-2 bg-yellow-100 rounded" id="station-16">잠실</div>
+    <div class="station px-4 py-2 bg-yellow-100 rounded" id="station-17">건대입구</div>
+  </div>
+
+  <div class="flex gap-4 mb-4">
+    <button id="rollButton" class="px-6 py-3 bg-yellow-400 text-white font-semibold rounded shadow">🎲 주사위 굴리기</button>
+    <button id="resetButton" class="px-6 py-3 bg-red-400 text-white font-semibold rounded shadow">🔄 리셋</button>
+  </div>
+
+  <p class="text-lg" id="status">현재 위치: 신촌</p>
+  <div class="mt-4 w-full max-w-md">
+    <h2 class="text-xl font-bold mb-2">📜 이동 로그</h2>
+    <ul id="log" class="list-disc list-inside bg-white p-4 rounded shadow max-h-48 overflow-y-auto"></ul>
+  </div>
+
+  <script>
+    const stations = [
+      "신촌", "홍대입구", "서울숲", "압구정로데오", "강남",
+      "선유도", "여의도", "마곡나루", "이촌", "이수",
+      "삼각지", "시청", "명동", "경복궁", "안국",
+      "종각", "잠실", "건대입구"
+    ];
+
+    let current = 0;
+
+    const updateDisplay = () => {
+      document.querySelectorAll('.station').forEach((el, index) => {
+        el.classList.remove('current');
+        const icon = el.querySelector('.sunflower');
+        if (icon) icon.remove();
+        if (index === current) {
+          el.classList.add('current');
+          const flower = document.createElement('span');
+          flower.textContent = '🌻';
+          flower.classList.add('sunflower');
+          el.appendChild(flower);
+        }
+      });
+      document.getElementById('status').textContent = `현재 위치: ${stations[current]}`;
+    }
+
+    const addToLog = (roll, prev, next) => {
+      const log = document.getElementById('log');
+      const entry = document.createElement('li');
+      entry.textContent = `${stations[prev]} ➡️ (${roll}) ➡️ ${stations[next]}`;
+      log.prepend(entry);
+    }
+
+    document.getElementById('rollButton').addEventListener('click', () => {
+      const roll = Math.floor(Math.random() * 6) + 1;
+      const previous = current;
+      current = (current + roll) % stations.length;
+      updateDisplay();
+      addToLog(roll, previous, current);
+    });
+
+    document.getElementById('resetButton').addEventListener('click', () => {
+      current = 0;
+      updateDisplay();
+      document.getElementById('log').innerHTML = '';
+    });
+
+    updateDisplay();
+  </script>
+</body>
+</html>
