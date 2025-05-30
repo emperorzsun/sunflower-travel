@@ -48,6 +48,10 @@
   <div class="board mb-6" id="board"></div>
 
   <div class="flex gap-4 mb-4 flex-wrap justify-center">
+    <label class="flex items-center gap-2 text-sm text-gray-700">
+      주사위 최대값:
+      <input id="diceMax" type="number" min="1" max="20" value="6" class="w-16 px-2 py-1 border rounded" />
+    </label>
     <button id="rollButton" class="px-6 py-3 bg-yellow-400 text-white font-semibold rounded shadow">🎲 주사위 굴리기</button>
     <button id="resetButton" class="px-6 py-3 bg-red-400 text-white font-semibold rounded shadow">🔄 리셋</button>
     <button id="cardButton" class="px-6 py-3 bg-green-400 text-white font-semibold rounded shadow">🎴 카드 뽑기</button>
@@ -79,6 +83,7 @@
     diceDisplay.className = "text-2xl font-bold text-red-500 bg-white rounded shadow flex items-center justify-center w-full h-full";
     diceDisplay.textContent = "🎲";
 
+
     const layoutMap = [
   0, 1, 2, 3, 4, 5,
   17, null, null, null, null, 6,
@@ -90,46 +95,50 @@
     const stations = [...realStations]; // 그대로 시계방향 순서
 
     layoutMap.forEach((pos, i) => {
-      const cell = document.createElement("div");
-      if (pos === null) {
-        cell.className = "empty";
-      } else if (pos === "dice") {
-        cell.appendChild(diceDisplay);
-      } else {
-        cell.id = `station-${pos}`;
-        cell.className = "station";
-        cell.textContent = stations[pos];
-      }
-      board.appendChild(cell);
-    });
+  const cell = document.createElement("div");
+  if (pos === null) {
+    cell.className = "empty";
+  } else if (pos === "dice") {
+    cell.appendChild(diceDisplay);
+  }  else {
+    cell.id = `station-${pos}`;
+    cell.className = "station";
+    cell.textContent = stations[pos];
+  }
+  board.appendChild(cell);
+});
 
     let current = 0;
     let isMoving = false;
 
     const updateDisplay = () => {
-      for (let i = 0; i < stations.length; i++) {
-        const el = document.getElementById(`station-${i}`);
-        if (!el) continue;
-        el.classList.remove("current");
-        const icon = el.querySelector(".sunflower");
-        if (icon) icon.remove();
-        if (i === current) {
-          el.classList.add("current");
-          const flower = document.createElement("span");
-          flower.textContent = "🌻";
-          flower.classList.add("sunflower");
-          el.appendChild(flower);
-        }
-      }
-      document.getElementById("status").textContent = `현재 위치: ${stations[current]}`;
-    };
+  for (let i = 0; i < stations.length; i++) {
+    const el = document.getElementById(`station-${i}`);
+    if (!el) continue;
+    el.classList.remove("current");
+    const icon = el.querySelector(".sunflower");
+    if (icon) icon.remove();
+    if (i === current) {
+      el.classList.add("current");
+      const flower = document.createElement("span");
+      flower.textContent = "🌻";
+      flower.classList.add("sunflower");
+      el.appendChild(flower);
+    }
+  }
+  document.getElementById("status").textContent = `현재 위치: ${stations[current]}`;
+  localStorage.setItem("current", current);
+}
 
     const addToLog = (roll, prev, next) => {
-      const log = document.getElementById("log");
-      const entry = document.createElement("li");
-      entry.textContent = `${stations[prev]} ➡️ (${roll}) ➡️ ${stations[next]}`;
-      log.prepend(entry);
-    };
+  const log = document.getElementById("log");
+  const entry = document.createElement("li");
+  entry.textContent = `${stations[prev]} ➡️ (${roll}) ➡️ ${stations[next]}`;
+  log.prepend(entry);
+
+  const logItems = Array.from(log.children).map(li => li.textContent);
+  localStorage.setItem("log", JSON.stringify(logItems));
+};
 
     const moveStepByStep = (from, to, roll) => {
       isMoving = true;
@@ -137,7 +146,27 @@
       let i = 0;
       const interval = setInterval(() => {
         current = (from + i + 1) % stations.length;
-        updateDisplay();
+        const savedCurrent = localStorage.getItem("current");
+if (savedCurrent !== null) {
+  current = parseInt(savedCurrent);
+}
+
+const savedLog = localStorage.getItem("log");
+if (savedLog) {
+  const logList = document.getElementById("log");
+  JSON.parse(savedLog).forEach(item => {
+    const li = document.createElement("li");
+    li.textContent = item;
+    logList.appendChild(li);
+  });
+}
+
+const savedCard = localStorage.getItem("card");
+if (savedCard) {
+  document.getElementById("cardDisplay").textContent = savedCard;
+}
+
+updateDisplay();
         i++;
         if (i >= steps) {
           clearInterval(interval);
@@ -149,26 +178,33 @@
 
     document.getElementById("rollButton").addEventListener("click", () => {
       if (isMoving) return;
-      const roll = Math.floor(Math.random() * 6) + 1;
+      const max = parseInt(document.getElementById("diceMax").value) || 6;
+      const roll = Math.floor(Math.random() * max) + 1;
       const previous = current;
       const next = (current + roll) % stations.length;
       diceDisplay.textContent = `🎲 ${roll}`;
+localStorage.setItem("dice", roll);
       moveStepByStep(previous, next, roll);
     });
 
     document.getElementById("resetButton").addEventListener("click", () => {
-      if (isMoving) return;
-      current = 0;
-      updateDisplay();
-      document.getElementById("log").innerHTML = "";
-      document.getElementById("cardDisplay").textContent = "";
-      diceDisplay.textContent = "🎲";
-    });
+  if (isMoving) return;
+  current = 0;
+  updateDisplay();
+  document.getElementById("log").innerHTML = "";
+  document.getElementById("cardDisplay").textContent = "";
+  diceDisplay.textContent = "🎲";
+  localStorage.removeItem("current");
+  localStorage.removeItem("log");
+  localStorage.removeItem("dice");
+});
 
     document.getElementById("cardButton").addEventListener("click", () => {
-      if (isMoving) return;
-      document.getElementById("cardDisplay").textContent = "카드 내용 예시 (추후 입력 가능)";
-    });
+  if (isMoving) return;
+  const cardText = "카드 내용 예시 (추후 입력 가능)";
+  document.getElementById("cardDisplay").textContent = cardText;
+  localStorage.setItem("card", cardText);
+});
 
     updateDisplay();
   </script>
