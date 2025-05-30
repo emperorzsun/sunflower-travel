@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>해바라기 - 서울 랜덤 여행</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
@@ -76,11 +76,10 @@
     const board = document.getElementById("board");
     const diceDisplay = document.createElement("div");
     diceDisplay.id = "diceDisplay";
-    diceDisplay.className = "text-2xl font-bold text-red-500 bg-white rounded shadow flex items-center justify-center";
+    diceDisplay.className = "text-2xl font-bold text-red-500 bg-white rounded shadow flex items-center justify-center w-full h-full";
     diceDisplay.textContent = "🎲";
 
-    // 시계방향으로 위치에 해당하는 인덱스
-    const boardLayout = [
+    const layoutMap = [
       0, 1, 2, 3, 4,
       19, null, null, null, 5,
       18, null, "dice", null, 6,
@@ -88,53 +87,46 @@
       16, 15, 14, 13, 8
     ];
 
-    // 보드에 표시할 실제 정렬된 역 (시계방향 순서)
-    const clockwiseOrder = [
-      0, 1, 2, 3, 4,
-      5, 6, 7, 8, 9,
-      10, 11, 12, 13, 14,
-      15, 16, 17, 18, 19
-    ];
+    const stations = [...realStations]; // 그대로 시계방향 순서
 
-    const stations = clockwiseOrder.map(i => realStations[i]);
-
-    for (let i = 0; i < boardLayout.length; i++) {
-      const container = document.createElement("div");
-      const pos = boardLayout[i];
+    layoutMap.forEach((pos, i) => {
+      const cell = document.createElement("div");
       if (pos === null) {
-        container.className = "empty";
+        cell.className = "empty";
       } else if (pos === "dice") {
-        container.appendChild(diceDisplay);
+        cell.appendChild(diceDisplay);
       } else {
-        container.id = `station-${pos}`;
-        container.className = "station";
-        container.textContent = stations[pos];
+        cell.id = `station-${pos}`;
+        cell.className = "station";
+        cell.textContent = stations[pos];
       }
-      board.appendChild(container);
-    }
+      board.appendChild(cell);
+    });
 
     let current = 0;
     let isMoving = false;
 
     const updateDisplay = () => {
-      document.querySelectorAll('.station').forEach((el, index) => {
-        el.classList.remove('current');
-        const icon = el.querySelector('.sunflower');
+      for (let i = 0; i < stations.length; i++) {
+        const el = document.getElementById(`station-${i}`);
+        if (!el) continue;
+        el.classList.remove("current");
+        const icon = el.querySelector(".sunflower");
         if (icon) icon.remove();
-        if (index === current) {
-          el.classList.add('current');
-          const flower = document.createElement('span');
-          flower.textContent = '🌻';
-          flower.classList.add('sunflower');
+        if (i === current) {
+          el.classList.add("current");
+          const flower = document.createElement("span");
+          flower.textContent = "🌻";
+          flower.classList.add("sunflower");
           el.appendChild(flower);
         }
-      });
-      document.getElementById('status').textContent = `현재 위치: ${stations[current]}`;
+      }
+      document.getElementById("status").textContent = `현재 위치: ${stations[current]}`;
     };
 
     const addToLog = (roll, prev, next) => {
-      const log = document.getElementById('log');
-      const entry = document.createElement('li');
+      const log = document.getElementById("log");
+      const entry = document.createElement("li");
       entry.textContent = `${stations[prev]} ➡️ (${roll}) ➡️ ${stations[next]}`;
       log.prepend(entry);
     };
@@ -155,28 +147,27 @@
       }, 400);
     };
 
-    document.getElementById('rollButton').addEventListener('click', () => {
+    document.getElementById("rollButton").addEventListener("click", () => {
       if (isMoving) return;
       const roll = Math.floor(Math.random() * 6) + 1;
       const previous = current;
       const next = (current + roll) % stations.length;
-      document.getElementById('diceDisplay').textContent = `🎲 ${roll}`;
+      diceDisplay.textContent = `🎲 ${roll}`;
       moveStepByStep(previous, next, roll);
     });
 
-    document.getElementById('resetButton').addEventListener('click', () => {
+    document.getElementById("resetButton").addEventListener("click", () => {
       if (isMoving) return;
       current = 0;
       updateDisplay();
-      document.getElementById('log').innerHTML = '';
-      document.getElementById('cardDisplay').textContent = '';
-      document.getElementById('diceDisplay').textContent = '🎲';
+      document.getElementById("log").innerHTML = "";
+      document.getElementById("cardDisplay").textContent = "";
+      diceDisplay.textContent = "🎲";
     });
 
-    document.getElementById('cardButton').addEventListener('click', () => {
+    document.getElementById("cardButton").addEventListener("click", () => {
       if (isMoving) return;
-      const card = "카드 내용 예시 (추후 입력 가능)";
-      document.getElementById('cardDisplay').textContent = card;
+      document.getElementById("cardDisplay").textContent = "카드 내용 예시 (추후 입력 가능)";
     });
 
     updateDisplay();
